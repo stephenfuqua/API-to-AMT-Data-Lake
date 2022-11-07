@@ -56,10 +56,22 @@ def _api_call(url: str, token: str, version: ChangeVersionValues) -> list:
     return result
 
 
+def alive_progress_bar(data: list = None) -> None:
+    import time
+
+    from alive_progress import alive_bar
+    with alive_bar(len(data), force_tty=True) as bar:
+        for _ in range(len(data)):
+            bar()
+            time.sleep(0.008)
+    print('\r\n')
+
+
 # Get JSON from API endpoint and save to file
 def api_async(school_year: any = None) -> None:
     import os
     from multiprocessing import Pool
+    print('\r\nGetting data from API...\r\n')
     token = get_token()
     version = _get_change_version_values(school_year)
     os_cpu = config("OS_CPU", cast=int) if config("OS_CPU") else os.cpu_count()
@@ -69,6 +81,7 @@ def api_async(school_year: any = None) -> None:
             url_name = JSONFile(url.split("/")[-1])
             data_async = pool.apply_async(_api_call, args=(url, token, version))
             save_file(url_name, version.newestChangeVersion, data_async.get(), school_year)
+            alive_progress_bar(data_async.get())
 
             # Deletes endpoint
             deletes_endpoint = get_url(endpoint[PATH], school_year, True)

@@ -41,7 +41,7 @@ def save_file(json_file: JSONFile, json_file_sufix: any, data: any, school_year:
         with open(f"{json_location}{school_year_path}{json_file.directory}/{json_file.name}_{json_file_sufix}.json", "w") as file:
             json.dump(data, file, indent=4)
             file_size = os.path.getsize(f"{json_location}{school_year_path}{json_file.directory}/{json_file.name}_{json_file_sufix}.json") / 1000000
-            print(f"File {json_file.name}({json_file_sufix}) saved with {file_size} MB")
+            print(f"File {json_file.name} saved with {file_size} MB")
 
 
 # Create a function to get endpoint url.
