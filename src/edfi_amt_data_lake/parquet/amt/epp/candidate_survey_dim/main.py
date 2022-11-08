@@ -192,7 +192,7 @@ def candidate_survey_dim_dataframe(school_year) -> pd.DataFrame:
         leftOn=[
             'surveyQuestionResponseReferenceId'
         ],
-        rigthOn=[
+        rightOn=[
             'surveyQuestionResponseReferenceId'
         ],
         suffixLeft=None,
@@ -208,7 +208,7 @@ def candidate_survey_dim_dataframe(school_year) -> pd.DataFrame:
         leftOn=[
             'surveyIdentifier'
         ],
-        rigthOn=[
+        rightOn=[
             'surveyIdentifier'
         ],
         suffixLeft='_survey',
@@ -224,7 +224,7 @@ def candidate_survey_dim_dataframe(school_year) -> pd.DataFrame:
         leftOn=[
             'surveyResponseReferenceId'
         ],
-        rigthOn=[
+        rightOn=[
             'surveyResponseReferenceId'
         ],
         suffixLeft='_survey',
@@ -241,7 +241,7 @@ def candidate_survey_dim_dataframe(school_year) -> pd.DataFrame:
             'surveyQuestionReferenceId',
             'questionCode'
         ],
-        rigthOn=[
+        rightOn=[
             'surveyQuestionReferenceId',
             'questionCode'
         ],
@@ -282,7 +282,7 @@ def candidate_survey_dim_dataframe(school_year) -> pd.DataFrame:
         right=survey_response_person_target_association_normalize,
         how='inner',
         leftOn=['surveyResponseReferenceId'],
-        rigthOn=['surveyResponseReferenceId'],
+        rightOn=['surveyResponseReferenceId'],
         suffixLeft='_survey',
         suffixRight='_response_person'
     )
@@ -316,7 +316,7 @@ def candidate_survey_dim_dataframe(school_year) -> pd.DataFrame:
         right=candidate_normalize,
         how='inner',
         leftOn=['personReferenceId'],
-        rigthOn=['personReferenceId'],
+        rightOn=['personReferenceId'],
         suffixLeft='_survey',
         suffixRight='_candidate'
     )
@@ -335,16 +335,27 @@ def candidate_survey_dim_dataframe(school_year) -> pd.DataFrame:
         + '-' + result_data_frame['personId']
     )
     result_data_frame['candidateKey'] = result_data_frame['candidateIdentifier']
+    result_data_frame = renameColumns(result_data_frame, {
+        'candidateSurveyKey': 'CandidateSurveyKey'
+        , 'candidateKey': 'CandidateKey'
+        , 'surveyTitle': 'SurveyTitle'
+        , 'surveySectionTitle': 'SurveySectionTitle'
+        , 'responseDateKey': 'ResponseDateKey'
+        , 'questionCode': 'QuestionCode'
+        , 'questionText': 'QuestionText'
+        , 'numericResponse': 'NumericResponse'
+        , 'textResponse': 'TextResponse'
+    })
     result_data_frame = subset(result_data_frame, [
-        'candidateSurveyKey'
-        , 'candidateKey'
-        , 'surveyTitle'
-        , 'surveySectionTitle'
-        , 'responseDateKey'
-        , 'questionCode'
-        , 'questionText'
-        , 'numericResponse'
-        , 'textResponse'
+        'CandidateSurveyKey'
+        , 'CandidateKey'
+        , 'SurveyTitle'
+        , 'SurveySectionTitle'
+        , 'ResponseDateKey'
+        , 'QuestionCode'
+        , 'QuestionText'
+        , 'NumericResponse'
+        , 'TextResponse'
     ])
     return result_data_frame
 

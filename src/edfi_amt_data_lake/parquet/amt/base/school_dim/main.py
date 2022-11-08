@@ -28,21 +28,29 @@ def school_dim(school_year) -> None:
     localEducationAgenciesContent = getEndpointJson(ENDPOINT_LOCALEDUCATIONAGENCIES, config('SILVER_DATA_LOCATION'), school_year)
     stateEducationAgenciesContent = getEndpointJson(ENDPOINT_STATEEDUCATIONAGENCIES, config('SILVER_DATA_LOCATION'), school_year)
     educationServiceCentersContent = getEndpointJson(ENDPOINT_EDUCATIONSERVICECENTERS, config('SILVER_DATA_LOCATION'), school_year)
-
     schoolsContentNormalized = jsonNormalize(
         schoolsContent,
         ['addresses'],
-        ['schoolId', 'nameOfInstitution', 'schoolTypeDescriptor', ['localEducationAgencyReference', 'localEducationAgencyId']],
+        [
+            'schoolId',
+            'nameOfInstitution',
+            'schoolTypeDescriptor',
+            ['localEducationAgencyReference', 'localEducationAgencyId'],
+        ],
         None,
         'address',
         'ignore'
     )
-
     # Local Education Agency Join
     localEducationAgenciesContentNormalized = jsonNormalize(
         localEducationAgenciesContent,
         recordPath=None,
-        meta=None,
+        meta=[
+            'localEducationAgencyId',
+            'nameOfInstitution',
+            'educationServiceCenterReference.educationServiceCenterId',
+            'stateEducationAgencyReference.stateEducationAgencyId'
+        ],
         metaPrefix=None,
         recordPrefix=None,
         errors='ignore'
@@ -57,7 +65,7 @@ def school_dim(school_year) -> None:
         right=localEducationAgenciesContentNormalized,
         how='left',
         leftOn=['localEducationAgencyReference.localEducationAgencyId'],
-        rigthOn=['localEducationAgencyId'],
+        rightOn=['localEducationAgencyId'],
         suffixLeft='_schools',
         suffixRight='_localEducationAgencies'
     )
@@ -66,7 +74,7 @@ def school_dim(school_year) -> None:
     educationServiceCentersContentNormalized = jsonNormalize(
         educationServiceCentersContent,
         recordPath=None,
-        meta=None,
+        meta=['educationServiceCenterId', 'nameOfInstitution'],
         metaPrefix=None,
         recordPrefix=None,
         errors='ignore'
@@ -80,7 +88,7 @@ def school_dim(school_year) -> None:
             right=educationServiceCentersContentNormalized,
             how='left',
             leftOn=['educationServiceCenterReference.educationServiceCenterId'],
-            rigthOn=['educationServiceCenterId'],
+            rightOn=['educationServiceCenterId'],
             suffixLeft=None,
             suffixRight='_educationServiceCenters'
         )
@@ -90,7 +98,7 @@ def school_dim(school_year) -> None:
         stateEducationAgenciesContentNormalized = jsonNormalize(
             stateEducationAgenciesContent,
             recordPath=None,
-            meta=None,
+            meta=['stateEducationAgencyId', 'nameOfInstitution'],
             metaPrefix=None,
             recordPrefix=None,
             errors='ignore'
@@ -104,7 +112,7 @@ def school_dim(school_year) -> None:
                 right=stateEducationAgenciesContentNormalized,
                 how='left',
                 leftOn=['stateEducationAgencyReference.stateEducationAgencyId'],
-                rigthOn=['stateEducationAgencyId'],
+                rightOn=['stateEducationAgencyId'],
                 suffixLeft=None,
                 suffixRight='_stateEducationAgencies'
             )
@@ -143,7 +151,6 @@ def school_dim(school_year) -> None:
         'nameOfInstitution': 'EducationServiceCenterName',
         'educationServiceCenterId': 'EducationServiceCenterKey'
     })
-
     # Reorder columns to match AMT
     restultDataFrame = restultDataFrame[[
         'SchoolKey',

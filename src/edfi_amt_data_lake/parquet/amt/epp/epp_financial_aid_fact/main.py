@@ -165,7 +165,7 @@ def epp_financial_aid_fact_dataframe(school_year) -> pd.DataFrame:
         leftOn=[
             'personReferenceId'
         ],
-        rigthOn=[
+        rightOn=[
             'personReferenceId'
         ],
         suffixLeft=None,
@@ -181,7 +181,7 @@ def epp_financial_aid_fact_dataframe(school_year) -> pd.DataFrame:
         leftOn=[
             'studentReferenceId'
         ],
-        rigthOn=[
+        rightOn=[
             'studentReferenceId'
         ],
         suffixLeft=None,
@@ -197,7 +197,7 @@ def epp_financial_aid_fact_dataframe(school_year) -> pd.DataFrame:
         leftOn=[
             'aidTypeDescriptorCodeValue'
         ],
-        rigthOn=[
+        rightOn=[
             'aidTypeDescriptorCodeValue'
         ],
         suffixLeft=None,
@@ -218,15 +218,25 @@ def epp_financial_aid_fact_dataframe(school_year) -> pd.DataFrame:
     )
     result_data_frame['candidateKey'] = result_data_frame['candidateIdentifier'].astype(str)
     result_data_frame['aidType'] = result_data_frame['aidTypeDescriptorCodeValue'].astype(str)
+    result_data_frame = renameColumns(result_data_frame, {
+        'candidateAidKey': 'CandidateAidKey'
+        , 'candidateKey': 'CandidateKey'
+        , 'beginDate': 'BeginDate'
+        , 'endDate': 'EndDate'
+        , 'aidConditionDescription': 'AidConditionDescription'
+        , 'aidType': 'AidType'
+        , 'aidAmount': 'AidAmount'
+        , 'pellGrantRecipient': 'PellGrantRecipient'
+    })
     result_data_frame = subset(result_data_frame, [
-        'candidateAidKey'
-        , 'candidateKey'
-        , 'beginDate'
-        , 'endDate'
-        , 'aidConditionDescription'
-        , 'aidType'
-        , 'aidAmount'
-        , 'pellGrantRecipient'
+        'CandidateAidKey'
+        , 'CandidateKey'
+        , 'BeginDate'
+        , 'EndDate'
+        , 'AidConditionDescription'
+        , 'AidType'
+        , 'AidAmount'
+        , 'PellGrantRecipient'
     ])
     return result_data_frame
 
