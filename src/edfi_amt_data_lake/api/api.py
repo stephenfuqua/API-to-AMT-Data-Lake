@@ -4,7 +4,7 @@
 # See the LICENSE and NOTICES files in the project root for more information.
 
 
-import requests
+# import requests
 from decouple import config
 
 from edfi_amt_data_lake.helper.base import PATH, JSONFile
