@@ -32,11 +32,6 @@ jobs:
 
     - name: Install Poetry
       run: pipx install poetry
-
-    - name: temp
-      run: |
-        echo $(pwd)
-        ls -al
         
     - name: Install Python 3.9
       uses: actions/setup-python@98f2ad02fd48d057ee3b4d4f66525b231c3e52b6 # v3.1.2
@@ -56,6 +51,7 @@ jobs:
       run: |
         poetry run flake8 ${{ env.PROJECT }} --output-file flake8.txt
         poetry run flake8_junit flake8.txt flake8.xml
+        ls -al
 
     # This needs some work. Stephen's not sure how to setup the tests correctly.
     # - name: Run Unit Tests
@@ -67,5 +63,5 @@ jobs:
       uses: actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8 # v3.1.0
       with:
         name: dagster-tests
-        path: "*.xml"
+        path: "**/*.xml"
         retention-days: 5
