@@ -2,8 +2,9 @@ from dagster import repository
 
 from dagster_data_lake.jobs.pipe_api import pipe_api_job
 from dagster_data_lake.schedules.schedule import hourly_schedule
-from dagster_data_lake.sensors.sensor import sensor
+from .sensors.sensor import sensor
 
+import os
 
 @repository
 def dagster_data_lake():
