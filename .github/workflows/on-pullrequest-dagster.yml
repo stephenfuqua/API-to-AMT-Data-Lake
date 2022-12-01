@@ -33,6 +33,11 @@ jobs:
     - name: Install Poetry
       run: pipx install poetry
 
+    - name: temp
+      run: |
+        echo $(pwd)
+        ls -al
+        
     - name: Install Python 3.9
       uses: actions/setup-python@98f2ad02fd48d057ee3b4d4f66525b231c3e52b6 # v3.1.2
       with:
@@ -41,8 +46,7 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        # Next line keeps poetry from trying to use the runner's default Python version
-        pushd ${{ env.SRC_DIR }} && poetry env use "3.9" && popd
+        poetry env use "3.9"
         poetry install
 
     - name: MyPy Linting
