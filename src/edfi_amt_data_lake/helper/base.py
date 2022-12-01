@@ -7,7 +7,7 @@
 PATH = 'endpoint'
 TABLE_NAME = 'table_name'
 
-
+# A change so that I can create a PR and trigger a build
 class JSONFile:
     def __init__(self, name):
         self.name = name
